@@ -1,93 +1,75 @@
 const S3_BUCKET = process.env.S3_BUCKET;
 
 module.exports = function (app, lambda, s3, upload) {
-   
-    
-   
+
+
+
     app.route("/csv")
-        .get(function (req, res, next) {
-            console.log("CSV")
-            res.render('index', { title: 'Challenge' });
-        })
         .post(upload.single('data'), function (req, res, next) {
-            console.log(req)
             if (req.file) {
-                console.log(req.file);
-                res.send(Object.keys(req.file))
+                res.sendStatus(200)
 
             } else {
-                res.send("FAILURE!");
+                res.sendStatus(500);
             }
-
         })
 
     app.route("/csv/:name")
         .get(function (req, res, next) {
-           
+
             s3.getObject({
                 Bucket: S3_BUCKET,
-                Key: "csv/"+ req.params.name +".csv"    
-            }, (err, data)=>{
-                if(err){
+                Key: "csv/" + req.params.name + ".csv"
+            }, (err, data) => {
+                if (err) {
                     console.log(err);
-                    res.render('showcsv', { file: 'Failure' });
-
-                }else{
-                    console.log(data.Body);
-                    res.render('showcsv', {file: data.Body.toString()});
+                   res.sendStatus(404);
+                } else {
+                    res.send(data.Body.toString());
 
                 }
-                
+
             })
-           
+
 
         })
         .post(upload.single('data'), function (req, res, next) {
-           console.log(req.file); 
-            res.send(200);  
+            res.sendStatus(200);
         })
 
-    app.route("/json")  .get(function (req, res, next) {
-        console.log("JSON")
-        res.render('index', { title: 'Challenge' });
-    })
-    .post(upload.single('data'), function (req, res, next) {
-        console.log(req)
-        if (req.file) {
-            console.log(req.file);
-            res.send(Object.keys(req.file))
+    app.route("/json")
+        .post(upload.single('data'), function (req, res, next) {
+            if (req.file) {
+                res.sendStatus(200)
 
-        } else {
-            res.send("FAILURE!");
-        }
-
-    })
-
-app.route("/json/:name")
-    .get(function (req, res, next) { 
-       
-        s3.getObject({
-            Bucket: S3_BUCKET,
-            Key: "json/" + req.params.name +".json"    
-        }, (err, data)=>{
-            if(err){
-                console.log(err);
-                res.render('showjson', { file: 'Failure' });
-
-            }else{
-                console.log(data.Body);
-            res.render('showjson', { file: data.Body });
-
+            } else {
+                res.sendStatus(500);
             }
-            
-        })
-       
 
-    })
-    .post(upload.single('data'), function (req, res, next) {
-       console.log(req.body); 
-        res.send(200);  
-    })
+        })
+
+    app.route("/json/:name")
+        .get(function (req, res, next) {
+
+            s3.getObject({
+                Bucket: S3_BUCKET,
+                Key: "json/" + req.params.name + ".json"
+            }, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                } else {
+
+                   res.json(JSON.parse(data.Body.toString()));
+                }
+
+            })
+
+
+        })
+        .post(upload.single('data'), function (req, res, next) {
+            res.sendStatus(200);
+        })
 
 
 };

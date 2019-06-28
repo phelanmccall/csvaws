@@ -22,7 +22,33 @@
     
     }
 
-    let form = document.getElementById("csvform");
-    console.log("adding!" + csvSubmit + " to " + form);
-    form.addEventListener("submit",csvSubmit);
+    function csvGet(event){
+        event.preventDefault();
+        console.log(event.target);
+        axios.get("/csv/"+event.target.name.value).then((res)=>{
+            console.log(res.data);
+            document.getElementById("resultDiv").innerHTML = res.data
+        })
+        .catch((err)=>{
+            console.log(err.message);
+            document.getElementById("resultDiv").innerHTML = err.message
+        });  
+    }
+    function jsonGet(event){
+        event.preventDefault();
+        axios.get("/json/"+event.target.name.value).then((res)=>{
+            console.log(res.data);
+            document.getElementById("resultDiv").innerHTML = JSON.stringify(res.data);
+        })
+        .catch((err)=>{
+            console.log(err.message);
+            document.getElementById("resultDiv").innerHTML = err.message
+        });  
+    }
+    let csvform = document.getElementById("csvform");
+    csvform.addEventListener("submit",csvSubmit);
+    let csvget = document.getElementById("csvget");
+    csvget.addEventListener("submit",csvGet);
+    let jsonget = document.getElementById("jsonget");
+    jsonget.addEventListener("submit",jsonGet);
  }());

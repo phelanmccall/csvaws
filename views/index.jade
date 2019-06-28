@@ -1,21 +1,48 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to my API. 
+  div(class="container")
+   div(class="row")     
+    h1= title
+    h1 API
+    ul 
+     li POST/GET "/cvs/{name}"
+     li POST/GET "/json/{name}"
 
-  h1 API
-  ul 
-    li POST/GET "/cvs/{name}"
-    li POST/GET "/json/{name}"
-    
+   div(class="row")
+  
+    h1 Post a csv file
 
-  form(id="csvform")
-      label(for="name") Name: 
-      input(type="text", name="name")
+    form(id="csvform", class="col-12")
+
       label(for="csvfile") File: 
+      br
       input(id="csvfile", type="file", name="csvfile")
+      br
       input(type="submit", value="Submit")
       
+   div(class="row")
+    div(class="col-6") 
+     h1 Get a csv file
+     form(id="csvget")
+      label(for="csvget") Name: 
+      br
+      input(id="csvname", type="name", name="name")
+      br
+      input(type="submit", value="Submit")
+    div(class="col-6")
+     h1 Get a json file
+     
+     form(id="jsonget")
+      label(for="jsonget") Name: 
+      br
+      input(id="jsonname", type="name", name="name")
+      br
+      input(type="submit", value="Submit")
+  
+    div(class="row")
+     h1 GET Result:
+     div(id="resultDiv",class="col-12")
+
   script(src="/javascripts/form.js")
 
