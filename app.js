@@ -33,8 +33,6 @@ var upload = multer({
 
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -48,8 +46,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var indexRouter = require('./routes/index');
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 require('./routes/routes')(app, lambda, s3, upload);
 
 
