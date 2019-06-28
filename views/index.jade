@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to my API. 
+
+  h1 API
+  ul 
+    li POST/GET "/cvs/{name}"
+    li POST/GET "/json/{name}"
+    
+
+  form(id="csvform")
+      label(for="name") Name: 
+      input(type="text", name="name")
+      label(for="csvfile") File: 
+      input(id="csvfile", type="file", name="csvfile")
+      input(type="submit", value="Submit")
+      
+  script(src="/javascripts/form.js")
+
