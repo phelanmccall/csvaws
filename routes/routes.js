@@ -1,4 +1,4 @@
-const S3BUCKET = 'csvchallenge';
+const S3_BUCKET = process.env.S3_BUCKET;
 
 module.exports = function (app, lambda, s3, upload) {
    
@@ -25,7 +25,7 @@ module.exports = function (app, lambda, s3, upload) {
         .get(function (req, res, next) {
            
             s3.getObject({
-                Bucket: S3BUCKET,
+                Bucket: S3_BUCKET,
                 Key: "csv/"+ req.params.name +".csv"    
             }, (err, data)=>{
                 if(err){
@@ -34,7 +34,7 @@ module.exports = function (app, lambda, s3, upload) {
 
                 }else{
                     console.log(data.Body);
-                res.render('showcsv', { file: 'Success' });
+                    res.render('showcsv', {file: data.Body.toString()});
 
                 }
                 
@@ -64,10 +64,10 @@ module.exports = function (app, lambda, s3, upload) {
     })
 
 app.route("/json/:name")
-    .get(function (req, res, next) {
+    .get(function (req, res, next) { 
        
         s3.getObject({
-            Bucket: S3BUCKET,
+            Bucket: S3_BUCKET,
             Key: "json/" + req.params.name +".json"    
         }, (err, data)=>{
             if(err){
@@ -76,7 +76,7 @@ app.route("/json/:name")
 
             }else{
                 console.log(data.Body);
-            res.render('showjson', { file: 'Success' });
+            res.render('showjson', { file: data.Body });
 
             }
             

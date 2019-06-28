@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -5,8 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var multer = require('multer'),
     multerS3 = require('multer-s3');
-const S3BUCKET = 'csvchallenge';
-
+const S3_BUCKET = process.env.S3_BUCKET;
 var aws = require('aws-sdk');
 aws.config = new aws.Config();
 aws.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
@@ -19,7 +19,7 @@ var s3 = new aws.S3();
 var upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: S3BUCKET,
+    bucket: S3_BUCKET,
     key: function (req, file, cb) {
 
       let fileType = file.originalname.split(".").pop();
